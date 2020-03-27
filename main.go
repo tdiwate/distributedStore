@@ -6,23 +6,23 @@ import (
 )
 
 type DistributedStore struct {
-	stores []map[string]int
+	stores []map[string]interface{}
 	capacity int
 }
 
 
 func NewDistributedStore(count int) *DistributedStore {
 	d := &DistributedStore{
-		stores:   make([]map[string]int, 10),
+		stores:   make([]map[string]interface{}, 10),
 		capacity: 10,
 	}
 	for i := range d.stores {
-		d.stores[i] = make(map[string]int)
+		d.stores[i] = make(map[string]interface{})
 	}
 	return d
 }
 
-func (d *DistributedStore) Write(key string, value int)  {
+func (d *DistributedStore) Write(key string, value interface{})  {
 	loc := hashFunc(key, d.capacity)
 	d.stores[loc][key] = value
 }
@@ -47,7 +47,6 @@ func (d *DistributedStore) Dump() {
 
 func main() {
 	dStore := NewDistributedStore(10)
-
 	dStore.Write("apple", 1)
 	dStore.Write("banana", 2)
 	dStore.Dump()
